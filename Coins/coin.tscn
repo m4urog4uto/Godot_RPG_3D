@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://cxbxh55oqk748"]
+
+[ext_resource type="Script" path="res://Coins/coin.gd" id="1_gw783"]
+[ext_resource type="PackedScene" uid="uid://dai11rttiu83n" path="res://GodotActionRPG-Assets/Models/GoldCoin.dae" id="1_j14ri"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lp6ib"]
+
+[node name="Coin" type="Area3D"]
+script = ExtResource("1_gw783")
+
+[node name="GoldCoin" parent="." instance=ExtResource("1_j14ri")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.221501, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("BoxShape3D_lp6ib")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

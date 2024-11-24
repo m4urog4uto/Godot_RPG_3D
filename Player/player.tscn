@@ -1,0 +1,87 @@
+[gd_scene load_steps=11 format=3 uid="uid://cckpf8q1df2ox"]
+
+[ext_resource type="PackedScene" uid="uid://bsl8vu5tmrhyq" path="res://GodotActionRPG-Assets/Models/Sword.dae" id="1_ack2e"]
+[ext_resource type="Script" path="res://Player/player.gd" id="1_tbmcn"]
+[ext_resource type="Script" path="res://Player/pivote.gd" id="1_ydy06"]
+[ext_resource type="PackedScene" uid="uid://cpc8r80hf6f03" path="res://ui/ui.tscn" id="4_fb8iw"]
+[ext_resource type="Script" path="res://ui/ui.gd" id="5_nreqa"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_wtyb6"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sg5gy"]
+
+[sub_resource type="Animation" id="Animation_jvqg3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sword:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-3.34595e-08, 1.5708, 1.32071)]
+}
+
+[sub_resource type="Animation" id="Animation_ygs1o"]
+resource_name = "attack"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sword:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(2.97032e-08, 1.5708, 0.038275), Vector3(-3.34595e-08, 1.5708, 1.32071)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ot0ol"]
+_data = {
+"RESET": SubResource("Animation_jvqg3"),
+"attack": SubResource("Animation_ygs1o")
+}
+
+[node name="Player" type="CharacterBody3D" groups=["Player"]]
+script = ExtResource("1_tbmcn")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_wtyb6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_sg5gy")
+
+[node name="Pivote" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("1_ydy06")
+
+[node name="Camera3D" type="Camera3D" parent="Pivote"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1, 1, -5)
+current = true
+
+[node name="WeaponHolder" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.58, 1, 0.035)
+
+[node name="Sword" parent="WeaponHolder" instance=ExtResource("1_ack2e")]
+transform = Transform3D(-1.39249e-07, 5.24866e-07, 0.15, 0.145334, 0.0371232, 5.01893e-09, -0.0371232, 0.145334, -5.42999e-07, 0, 0, 0)
+
+[node name="SwordAnimator" type="AnimationPlayer" parent="WeaponHolder"]
+libraries = {
+"": SubResource("AnimationLibrary_ot0ol")
+}
+
+[node name="AttackRayCast" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 1, 0.6)
+target_position = Vector3(0, 0, 1.5)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UI" parent="CanvasLayer" instance=ExtResource("4_fb8iw")]
+script = ExtResource("5_nreqa")
